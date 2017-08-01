@@ -4,9 +4,13 @@ using System.Linq;
 using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
+using Thinktecture.IdentityModel.Mvc;
 
 namespace Localink.UserCenter.Controllers
 {
+
+    [HandleForbidden]
+    [Auth(Roles = "Administrators")]
     public class HomeController : Controller
     {
         public ActionResult Index()

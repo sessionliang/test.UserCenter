@@ -13,6 +13,9 @@ namespace Localink.UserCenter
     {
         public void Configuration(IAppBuilder app)
         {
+            //配置Asp.Net Identity Owin
+            IdentityConfig.Configure(app);
+
             //配置IdentityServer3.0
             OAuthConfig.Configure(app);
 

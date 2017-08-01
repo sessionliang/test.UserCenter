@@ -42,8 +42,6 @@ namespace Localink.UserCenter.App_Start
 
                 idsrvApp.UseIdentityServer(idsrvOptions);
             });
-
-
         }
 
         private static void ConfigureAdditionalIdentityProviders(IAppBuilder app, string signInAsType)

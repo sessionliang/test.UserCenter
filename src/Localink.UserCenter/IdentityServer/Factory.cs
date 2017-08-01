@@ -1,4 +1,5 @@
 ﻿using IdentityServer3.Core.Configuration;
+using Localink.UserCenter.AspNetIdentity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,13 +23,18 @@ namespace Localink.UserCenter.IdentityServer
              * *****************/
 
             #region 测试环境
-            factory.UseInMemoryUsers(Users.Get())
-                        .UseInMemoryClients(Clients.Get())
-                        .UseInMemoryScopes(Scopes.Get());
+            //factory.UseInMemoryUsers(Users.Get())
+            //            .UseInMemoryClients(Clients.Get())
+            //            .UseInMemoryScopes(Scopes.Get());
             #endregion
 
             #region 正式环境
+            //目前Client, Scope存储在内存中，后面会改为数据库
+            factory.UseInMemoryClients(Clients.Get())
+                        .UseInMemoryScopes(Scopes.Get());
 
+            //配置UserStore
+            factory.ConfigureCustomUserService();
             #endregion
 
             return factory;
