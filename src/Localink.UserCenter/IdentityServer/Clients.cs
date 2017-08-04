@@ -1,4 +1,5 @@
 ﻿using IdentityServer3.Core.Models;
+using Localink.UserCenter.App_Start;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +21,22 @@ namespace Localink.UserCenter.IdentityServer
                     RequireConsent = false,
                     AllowAccessToAllScopes = true,
                     RedirectUris = new List<string> {
-                        "https://localhost:44333/"
+                        IdentityConfig.IdsrvRootAddress
+                    },
+                    PostLogoutRedirectUris = new List<string> {
+                       IdentityConfig.IdsrvRootAddress
+                    }
+                },
+                new Client
+                {
+                    ClientName = "IOS Client",
+                    ClientId="localink.ios.app",
+                    ClientSecrets = new List<Secret> {
+                        new Secret("55b7bab9-c741-47f7-9d50-f5a654386029".Sha256())
+                    },
+                    Flow = Flows.ResourceOwner,
+                    AllowedCorsOrigins = new List<string> {
+                        "http://127.0.0.1:8020"
                     },
                     AllowedScopes = new List<string>
                     {
@@ -29,7 +45,7 @@ namespace Localink.UserCenter.IdentityServer
                         "roles",
                         "keyApi"
                     }
-                }
+                },
             };
         }
     }

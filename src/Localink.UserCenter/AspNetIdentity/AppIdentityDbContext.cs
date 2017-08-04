@@ -93,8 +93,12 @@ namespace Localink.UserCenter.AspNetIdentity
                 userMgr.AddToRole(user.Id, roleName);
             }
 
+            userMgr.AddClaim(user.Id, new System.Security.Claims.Claim("first_name","justing"));
+            userMgr.AddClaim(user.Id, new System.Security.Claims.Claim("last_name", "bibo"));
+            userMgr.AddClaim(user.Id, new System.Security.Claims.Claim("country_code", "+86"));
+
             //普通用户角色
-            string userRoleName = "User";
+            string userRoleName = "Users";
             if (!roleMgr.RoleExists(userRoleName))
             {
                 roleMgr.Create(new AppRole(userRoleName));

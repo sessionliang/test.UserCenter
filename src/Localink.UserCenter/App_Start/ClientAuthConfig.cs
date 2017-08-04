@@ -38,13 +38,13 @@ namespace Localink.UserCenter.App_Start
             app.UseOpenIdConnectAuthentication(new Microsoft.Owin.Security.OpenIdConnect.OpenIdConnectAuthenticationOptions
             {
                 //认证地址
-                Authority = "https://localhost:44333/identity",
+                Authority = IdentityConfig.IdsrvRootAddress + "identity",
                 //客户端标识
                 ClientId = "mvc",
                 //客户端秘钥，这里因为是自己调用自己，所以没有设置秘钥
                 //ClientSecret = "",
                 //认证回调
-                RedirectUri = "https://localhost:44333/",
+                RedirectUri = IdentityConfig.IdsrvRootAddress,
                 //客户端需要的授权范围scope，提供给用户确认时，选择的(注意：openid必选。openid是区分这个请求是认证请求，而不是授权请求的。)
                 Scope = "openid profile roles keyApi",
                 //返回类型：id_token(OIDC的认证的用户身份信息)   token(access_token, 授权的访问令牌)
@@ -60,6 +60,7 @@ namespace Localink.UserCenter.App_Start
                     #region 配置其他适用的claim
                     SecurityTokenValidated = async n =>
                              {
+
                                  var nid = new ClaimsIdentity(
                                      n.AuthenticationTicket.Identity.AuthenticationType,
                                      Constants.ClaimTypes.GivenName,
@@ -80,9 +81,6 @@ namespace Localink.UserCenter.App_Start
 
                                  // keep track of access token expiration
                                  nid.AddClaim(new Claim("expires_at", DateTimeOffset.Now.AddSeconds(int.Parse(n.ProtocolMessage.ExpiresIn)).ToString()));
-
-                                 // add some other app specific claim
-                                 nid.AddClaim(new Claim("app_specific", "some data"));
 
                                  n.AuthenticationTicket = new AuthenticationTicket(
                                      nid,

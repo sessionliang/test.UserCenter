@@ -28,11 +28,11 @@ namespace Localink.UserCenter.AspNetIdentity.Validators
             {
                 errors.Add("admin is not allowed");
             }
-            if (!user.Email.ToLower().EndsWith("@example.com"))
-            {
-                errors.Add("Only example.com email addresses are allowed");
-                result = new IdentityResult(errors);
-            }
+            //if (!user.Email.ToLower().EndsWith("@example.com"))
+            //{
+            //    errors.Add("Only example.com email addresses are allowed");
+            //    result = new IdentityResult(errors);
+            //}
             if (errors.Count > 0)
             {
                 result = new IdentityResult(errors);
