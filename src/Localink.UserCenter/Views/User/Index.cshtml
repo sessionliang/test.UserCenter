@@ -64,7 +64,7 @@
                                 <a title="编辑" href="javascript:;" onclick="member_edit('编辑','/User/Edit/@user.Id','@user.Id','','510')" class="ml-5" style="text-decoration:none">
                                     <i class="Hui-iconfont">&#xe6df;</i>
                                 </a>
-                                <a style="text-decoration:none" class="ml-5" onClick="change_password('修改密码','/User/UpdatePwd','@user.Id','600','270')" href="javascript:;" title="修改密码">
+                                <a style="text-decoration:none" class="ml-5" onClick="change_password('修改密码','/User/UpdatePwd/@user.Id','@user.Id','600','270')" href="javascript:;" title="修改密码">
                                     <i class="Hui-iconfont">&#xe63f;</i>
                                 </a>
                                 <a title="删除" href="javascript:;" onclick="member_del(this,'@user.Id')" class="ml-5" style="text-decoration:none">

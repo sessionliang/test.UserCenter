@@ -24,6 +24,8 @@ namespace Localink.UserCenter.App_Start
                 //配置Client/Scope/User
                 var factory = Factory.Configure();
 
+                factory.ClaimsProvider = new Registration<IdentityServer3.Core.Services.IClaimsProvider, CustomClaimsProvider>();
+
                 //配置idsrc options
                 var idsrvOptions = new IdentityServerOptions
                 {

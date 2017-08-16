@@ -18,11 +18,9 @@ namespace Localink.UserCenter.IdentityServer
                     Type=ScopeType.Identity,
                     Claims = new List<ScopeClaim>
                     {
-                        new ScopeClaim("role"),
-                        new ScopeClaim("first_name"),
-                        new ScopeClaim("last_name"),
-                        new ScopeClaim("country_code")
-                    }
+                        new ScopeClaim("role", alwaysInclude : true)
+                    },
+                    IncludeAllClaimsForUser = true
                 },
                 new Scope
                 {

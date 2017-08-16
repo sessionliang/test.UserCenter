@@ -24,10 +24,10 @@ namespace Localink.UserCenter.AspNetIdentity.Validators
         {
             var result = await base.ValidateAsync(user);
             var errors = result.Errors.ToList();
-            if (user.UserName.ToLower() == "admin")
-            {
-                errors.Add("admin is not allowed");
-            }
+            //if (user.UserName.ToLower() == "admin")
+            //{
+            //    errors.Add("admin is not allowed");
+            //}
             //if (!user.Email.ToLower().EndsWith("@example.com"))
             //{
             //    errors.Add("Only example.com email addresses are allowed");

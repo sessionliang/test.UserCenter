@@ -1,9 +1,11 @@
 ﻿using Localink.UserCenter.AspNetIdentity.Entitys;
 using Localink.UserCenter.AspNetIdentity.Validators;
+using Localink.UserCenter.IdentityServer;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
+using Microsoft.Owin.Security.DataProtection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,7 +34,7 @@ namespace Localink.UserCenter.AspNetIdentity.Managers
             userManager.PasswordValidator = new CustomePasswordValidator()
             {
                 RequiredLength = 6,
-                RequireLowercase = true,
+                RequireLowercase = false,
                 RequireDigit = true,
                 RequireNonLetterOrDigit = false,
                 RequireUppercase = false
@@ -44,6 +46,9 @@ namespace Localink.UserCenter.AspNetIdentity.Managers
                 AllowOnlyAlphanumericUserNames = true,//用户名只能包含数字，字母
                 RequireUniqueEmail = true//邮箱唯一
             };
+
+            //设置claim创建
+            //userManager.ClaimsIdentityFactory = new CustomClaimsIdentityFactory<AppUser>();
 
             return userManager;
         }

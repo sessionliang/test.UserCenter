@@ -14,11 +14,11 @@ namespace Localink.UserCenter.AspNetIdentity.Entitys
         /// <summary>
         /// 名
         /// </summary>
-        public string FirstName { get; set; }
+        public string ForeName { get; set; }
         /// <summary>
         /// 姓
         /// </summary>
-        public string LastName { get; set; }
+        public string SurName { get; set; }
         /// <summary>
         /// 注册时间
         /// </summary>
@@ -35,5 +35,9 @@ namespace Localink.UserCenter.AspNetIdentity.Entitys
         /// 国家代码
         /// </summary>
         public string CountryCode { get; set; }
+        /// <summary>
+        /// 头像
+        /// </summary>
+        public string Picture { get; set; }
     }
 }

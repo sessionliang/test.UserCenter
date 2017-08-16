@@ -3,6 +3,7 @@ using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
@@ -24,6 +25,21 @@ namespace Localink.UserCenter.Controllers.Api
             get
             {
                 return HttpContext.Current.Request.GetOwinContext().GetUserManager<AppRoleManager>();
+            }
+        }
+
+        protected long UserId
+        {
+            get
+            {
+                try
+                {
+                    return Convert.ToInt64((User as ClaimsPrincipal).FindFirst("sub").Value);
+                }
+                catch (Exception)
+                {
+                    throw new Exception("user is not login.");
+                }
             }
         }
     }

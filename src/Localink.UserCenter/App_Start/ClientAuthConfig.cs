@@ -17,6 +17,9 @@ using IdentityModel.Client;
 using System.Threading.Tasks;
 using System.IdentityModel.Tokens;
 using System.Web.Helpers;
+using Microsoft.AspNet.Identity.Owin;
+using Localink.UserCenter.AspNetIdentity.Managers;
+using IdentityServer3.AccessTokenValidation;
 
 namespace Localink.UserCenter.App_Start
 {
@@ -27,6 +30,8 @@ namespace Localink.UserCenter.App_Start
     {
         public static void Configure(IAppBuilder app)
         {
+
+
             //1. 配置CookieAuthentication
             app.UseCookieAuthentication(new Microsoft.Owin.Security.Cookies.CookieAuthenticationOptions()
             {
@@ -68,10 +73,10 @@ namespace Localink.UserCenter.App_Start
 
                                  // get userinfo data
                                  var userInfoClient = new UserInfoClient(
-                                          new Uri(n.Options.Authority + "/connect/userinfo").ToString());
+                                          new Uri(n.Options.Authority + "/connect/userinfo"), n.ProtocolMessage.AccessToken);
 
-                                 var userInfo = await userInfoClient.GetAsync(n.ProtocolMessage.AccessToken);
-                                 userInfo.Claims.ToList().ForEach(ui => nid.AddClaim(new Claim(ui.Type, ui.Value)));
+                                 var userInfo = await userInfoClient.GetAsync();
+                                 userInfo.Claims.ToList().ForEach(ui => nid.AddClaim(new Claim(ui.Item1, ui.Item2)));
 
                                  // keep the id_token for logout
                                  nid.AddClaim(new Claim("id_token", n.ProtocolMessage.IdToken));
@@ -81,6 +86,8 @@ namespace Localink.UserCenter.App_Start
 
                                  // keep track of access token expiration
                                  nid.AddClaim(new Claim("expires_at", DateTimeOffset.Now.AddSeconds(int.Parse(n.ProtocolMessage.ExpiresIn)).ToString()));
+
+
 
                                  n.AuthenticationTicket = new AuthenticationTicket(
                                      nid,
@@ -112,6 +119,7 @@ namespace Localink.UserCenter.App_Start
 
             //4. 配置ResourceAuthorization
             app.UseResourceAuthorization(new AuthorizationManager());
+
         }
 
     }

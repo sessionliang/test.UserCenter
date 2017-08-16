@@ -15,7 +15,7 @@ namespace Localink.UserCenter.IdentityServer
             //对应项目文件夹  ./IdentityServer/idsrv3test.pfx
             using (var stream = assembly.GetManifestResourceStream("Localink.UserCenter.IdentityServer.idsrv3test.pfx"))
             {
-                return new X509Certificate2(ReadStream(stream), "idsrv3test", X509KeyStorageFlags.UserKeySet);
+                return new X509Certificate2(ReadStream(stream), "idsrv3test", X509KeyStorageFlags.UserKeySet | X509KeyStorageFlags.MachineKeySet);
             }
         }
 
