@@ -1,5 +1,9 @@
-﻿using Localink.UserCenter.AspNetIdentity.Entitys;
+﻿using IdentityServer3.Core.Services;
+using Localink.UserCenter.App_Start;
+using Localink.UserCenter.AspNetIdentity.Entitys;
+using Localink.UserCenter.AspNetIdentity.Managers;
 using Localink.UserCenter.Common;
+using Localink.UserCenter.IdentityServer;
 using Localink.UserCenter.Models.Api;
 using Localink.UserCenter.Models.Api.Users;
 using Microsoft.AspNet.Identity;
@@ -14,6 +18,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using System.Web.Http.Results;
 using Thinktecture.IdentityModel.Mvc;
 
 namespace Localink.UserCenter.Controllers.Api
@@ -29,7 +34,7 @@ namespace Localink.UserCenter.Controllers.Api
         [Route("Register")]
         [HttpPost]
         [AllowAnonymous]
-        public async Task<dynamic> Register(AddUserInput input)
+        public async Task<ApiResult> Register(AddUserInput input)
         {
             try
             {
@@ -52,11 +57,17 @@ namespace Localink.UserCenter.Controllers.Api
                         PhoneNumber = input.PhoneNumber,
                         Gender = true,
                         RegisterTime = DateTime.Now,
-                        CountryCode = input.CountryCode
+                        CountryCode = input.CountryCode,
+                        ForeName = input.Forename,
+                        SurName = input.Surname
                     };
 
                     await UserManager.CreateAsync(user, input.Password);
                     user = await UserManager.FindByNameAsync(input.UserName);
+                }
+                else
+                {
+                    return ApiResult.CreateErrorResult("UserName is exists.", !User.Identity.IsAuthenticated);
                 }
 
                 //添加用户角色
@@ -64,17 +75,17 @@ namespace Localink.UserCenter.Controllers.Api
                 {
                     await UserManager.AddToRoleAsync(user.Id, roleName);
                 }
-                return Json(ApiResult.CreateSuccessResult(new
+                return ApiResult.CreateSuccessResult(new
                 {
                     UserName = user.UserName,
                     Phone = user.PhoneNumber,
                     EmailAddress = user.Email,
                     CountryCode = user.CountryCode
-                }, User.Identity.IsAuthenticated));
+                }, !User.Identity.IsAuthenticated);
             }
             catch (Exception ex)
             {
-                return Json(ApiResult.CreateErrorResult(ex, User.Identity.IsAuthenticated));
+                return ApiResult.CreateErrorResult(ex, !User.Identity.IsAuthenticated);
             }
         }
 
@@ -85,7 +96,7 @@ namespace Localink.UserCenter.Controllers.Api
         /// <param name="value"></param>
         [Route("UpdateUser")]
         [HttpPost]
-        public async Task<dynamic> UpdateUser(UpdateUserInput input)
+        public async Task<ApiResult> UpdateUser(UpdateUserInput input)
         {
             try
             {
@@ -98,17 +109,17 @@ namespace Localink.UserCenter.Controllers.Api
                 user.Address = input.Address;
                 await UserManager.UpdateAsync(user);
 
-                return Json(ApiResult.CreateSuccessResult(new
+                return ApiResult.CreateSuccessResult(new
                 {
                     UserName = user.UserName,
                     Phone = user.PhoneNumber,
                     EmailAddress = user.Email,
                     CountryCode = user.CountryCode
-                }, User.Identity.IsAuthenticated));
+                }, !User.Identity.IsAuthenticated);
             }
             catch (Exception ex)
             {
-                return Json(ApiResult.CreateErrorResult(ex, User.Identity.IsAuthenticated));
+                return ApiResult.CreateErrorResult(ex, !User.Identity.IsAuthenticated);
             }
         }
 
@@ -119,7 +130,7 @@ namespace Localink.UserCenter.Controllers.Api
         /// <returns></returns>
         [HttpPost]
         [Route("UpdatePwd")]
-        public async Task<dynamic> UpdatePwd(UpdatePwdInput input)
+        public async Task<ApiResult> UpdatePwd(UpdatePwdInput input)
         {
             try
             {
@@ -127,18 +138,29 @@ namespace Localink.UserCenter.Controllers.Api
                 {
                     throw new Exception("Two input password is not consistent");
                 }
+                //var user = await UserManager.FindByIdAsync(UserId);
+                //var check = await UserManager.CheckPasswordAsync(user, input.Password);
 
+                //if (!check)
+                //{
+                //    throw new Exception("Password is not correct");
+                //}
+                //var passwordHash = UserManager.PasswordHasher.HashPassword(input.NewPassword);
+                //var userStore = HttpContext.Current.Request.GetOwinContext().GetUserManager<AppUserStore>();
+                //await userStore.SetPasswordHashAsync(user, passwordHash);
+                //await userStore.UpdateAsync(user);
+                //SignInManager.AuthenticationManager.SignOut(User.Identity.AuthenticationType);
+                //return ApiResult.CreateSuccessResult(string.Empty, !User.Identity.IsAuthenticated);
                 var result = await UserManager.ChangePasswordAsync(UserId, input.Password, input.NewPassword);
 
                 if (result.Succeeded)
-                    return Json(ApiResult.CreateSuccessResult(null, User.Identity.IsAuthenticated));
+                    return ApiResult.CreateSuccessResult(string.Empty, !User.Identity.IsAuthenticated);
                 else
-                    return Json(ApiResult.CreateErrorResult(String.Join(".", result.Errors), User.Identity.IsAuthenticated));
-
+                    return ApiResult.CreateErrorResult(String.Join(".", result.Errors), !User.Identity.IsAuthenticated);
             }
             catch (Exception ex)
             {
-                return Json(ApiResult.CreateErrorResult(ex, User.Identity.IsAuthenticated));
+                return ApiResult.CreateErrorResult(ex, !User.Identity.IsAuthenticated);
             }
         }
 
@@ -148,11 +170,11 @@ namespace Localink.UserCenter.Controllers.Api
         /// <returns></returns>
         [HttpPost]
         [Route("UploadPicture")]
-        public async Task<dynamic> UploadPicture()
+        public async Task<ApiResult> UploadPicture()
         {
             try
             {
-                var path = "upload/picture/";
+                var path = "~/upload/picture/";
                 var fileName = UserId + ".png";
                 //头像路径:  ./upload/picture/userId.png
                 if (HttpContext.Current.Request.Files.Count > 0)
@@ -170,15 +192,52 @@ namespace Localink.UserCenter.Controllers.Api
                 var result = await UserManager.UpdateAsync(user);
 
                 if (result.Succeeded)
-                    return Json(ApiResult.CreateSuccessResult(null, User.Identity.IsAuthenticated));
+                    return ApiResult.CreateSuccessResult(PathUtils.GetNetPath(user.Picture), !User.Identity.IsAuthenticated);
                 else
-                    return Json(ApiResult.CreateErrorResult(String.Join(".", result.Errors), User.Identity.IsAuthenticated));
+                    return ApiResult.CreateErrorResult(String.Join(".", result.Errors), !User.Identity.IsAuthenticated);
             }
             catch (Exception ex)
             {
-                return Json(ApiResult.CreateErrorResult(ex, User.Identity.IsAuthenticated));
+                return ApiResult.CreateErrorResult(ex, !User.Identity.IsAuthenticated);
             }
 
+        }
+
+        /// <summary>
+        /// 忘记密码，发送邮件
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("ForgetPwd")]
+        public async Task<ApiResult> ForgetPwd(ForgetPwdInput input)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(input.Email))
+                {
+                    throw new Exception("Email is required.");
+                }
+                var user = await UserManager.FindByEmailAsync(input.Email);
+                if (user == null)
+                {
+                    throw new Exception("User is not exists.");
+                }
+                var changeToken = await UserManager.GenerateUserTokenAsync("change password", user.Id);
+
+                await UserManager.EmailService.SendAsync(new IdentityMessage
+                {
+                    Destination = user.Email,
+                    Subject = "[Important Email] Change Password",
+                    Body = string.Format("<div>Dear {0} {1}:<br/>Please click the next link, change the password.Please do not disclose the information.</div><br /><a href='{2}User/ChangePwd?token={3}&email={4}'>{2}User/ChangePwd?token={3}&email={4}</a>", user.ForeName, user.SurName, IdentityConfig.IdsrvRootAddress, HttpUtility.UrlEncode(changeToken), user.Email)
+                });
+                return ApiResult.CreateSuccessResult(new { }, !User.Identity.IsAuthenticated);
+            }
+            catch (Exception ex)
+            {
+                return ApiResult.CreateErrorResult(ex, !User.Identity.IsAuthenticated);
+            }
         }
     }
 }

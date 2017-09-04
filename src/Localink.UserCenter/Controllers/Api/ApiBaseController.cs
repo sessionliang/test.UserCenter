@@ -28,6 +28,14 @@ namespace Localink.UserCenter.Controllers.Api
             }
         }
 
+        protected AppSignInManager SignInManager
+        {
+            get
+            {
+                return HttpContext.Current.Request.GetOwinContext().GetUserManager<AppSignInManager>();
+            }
+        }
+
         protected long UserId
         {
             get

@@ -29,16 +29,28 @@ namespace Localink.UserCenter.IdentityServer
                 },
                 new Client
                 {
+                    ClientName = "Localink Platform Client",
+                    ClientId="localink.platform",
+                    ClientSecrets = new List<Secret> {
+                        new Secret("b1b5b082-ab75-440c-9ca8-c6d35430c159".Sha256())
+                    },
+                    Flow = Flows.ClientCredentials,
+                    //隐藏客户授权许可页面，默认授权
+                    RequireConsent = false,
+                    AllowAccessToAllScopes = true
+                },
+                new Client
+                {
                     ClientName = "Localink App Client",
                     ClientId="localink.ios.app",
                     ClientSecrets = new List<Secret> {
                         new Secret("55b7bab9-c741-47f7-9d50-f5a654386029".Sha256())
                     },
                     Flow = Flows.ResourceOwner,
-                    //AllowedCorsOrigins = new List<string> {
-                    //    "http://127.0.0.1:8020"
-                    //},
-                    
+                    AllowedCorsOrigins = new List<string> {
+                        "http://127.0.0.1:8020"
+                    },
+
                     AllowedScopes = new List<string>
                     {
                         "openid",

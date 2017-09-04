@@ -15,6 +15,9 @@ namespace Localink.UserCenter.AspNetIdentity
     /// </summary>
     public class AppIdentityDbContext : IdentityDbContext<AppUser, AppRole, long, AppUserLogin, AppUserRole, AppUserClaim>
     {
+        public static AppIdentityDbContext _context;
+        private static object obj = new object();
+
         /// <summary>
         /// 默认构造
         /// </summary>
@@ -44,6 +47,15 @@ namespace Localink.UserCenter.AspNetIdentity
         /// <returns></returns>
         public static AppIdentityDbContext Create()
         {
+            //lock (obj)
+            //{
+            //    if (_context == null)
+            //    {
+            //        _context = new AppIdentityDbContext();
+            //    }
+            //    return _context;
+            //}
+
             return new AppIdentityDbContext();
         }
     }

@@ -9,6 +9,7 @@ using Localink.UserCenter.AspNetIdentity.Managers;
 using IdentityServer3.Core.Configuration;
 using IdentityServer3.Core.Services;
 using Microsoft.AspNet.Identity.Owin;
+using Localink.UserCenter.IdentityServer;
 
 namespace Localink.UserCenter.AspNetIdentity
 {
@@ -32,6 +33,8 @@ namespace Localink.UserCenter.AspNetIdentity
             factory.Register(new Registration<AppRoleManager>(resolver => AppRoleManager.Create(appContext)));
             factory.Register(new Registration<AppRoleStore>());
             factory.Register(new Registration<AppIdentityDbContext>(resolver => appContext));
+
+            factory.AuthenticationSessionValidator = new Registration<IAuthenticationSessionValidator, CustomeAuthenticationSessionValidator>();
         }
     }
 }

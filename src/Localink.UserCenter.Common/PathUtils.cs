@@ -61,7 +61,11 @@ namespace Localink.UserCenter.Common
         /// <param name="path"></param>
         public static string GetNetPath(string path)
         {
-            return ConfigurationManager.AppSettings["IdentityServerRootAddress"] + path;
+            if (path.StartsWith("~/"))
+                path = path.Replace("~/", "");
+            path = ConfigurationManager.AppSettings["IdentityServerRootAddress"] + path;
+            path = path.Replace("//", "/");
+            return path;
         }
     }
 }

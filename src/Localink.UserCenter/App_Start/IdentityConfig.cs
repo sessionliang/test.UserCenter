@@ -17,7 +17,9 @@ namespace Localink.UserCenter.App_Start
         {
             app.CreatePerOwinContext(AppIdentityDbContext.Create);
             app.CreatePerOwinContext<AppUserManager>(AppUserManager.Create);
+            app.CreatePerOwinContext<AppUserStore>(AppUserStore.Create);
             app.CreatePerOwinContext<AppRoleManager>(AppRoleManager.Create);
+            app.CreatePerOwinContext<AppSignInManager>(AppSignInManager.Create);
         }
     }
 }

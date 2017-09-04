@@ -21,6 +21,7 @@ namespace Localink.UserCenter.App_Start
             // 配置Idsrv路由地址，以及Idsrv options
             app.Map("/identity", idsrvApp =>
             {
+                #region 配置IdentityServer
                 //配置Client/Scope/User
                 var factory = Factory.Configure();
 
@@ -43,6 +44,7 @@ namespace Localink.UserCenter.App_Start
                 };
 
                 idsrvApp.UseIdentityServer(idsrvOptions);
+                #endregion
             });
         }
 

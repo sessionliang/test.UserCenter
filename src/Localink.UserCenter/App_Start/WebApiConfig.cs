@@ -18,17 +18,12 @@ namespace Localink.UserCenter
         public static void Register(HttpConfiguration config)
         {
             // Web API 设置
-            var jsonFormatter = new JsonMediaTypeFormatter();
-            var settings = jsonFormatter.SerializerSettings;
+            var json = config.Formatters.JsonFormatter;
 
-            IsoDateTimeConverter timeConverter = new IsoDateTimeConverter();
-            //这里使用自定义日期格式
-            timeConverter.DateTimeFormat = "yyyy'-'MM'-'dd' 'HH':'mm':'ss";
-            settings.Converters.Add(timeConverter);
-
-
-            settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-            config.Services.Replace(typeof(IContentNegotiator), new JsonContentNegotiator(jsonFormatter));
+            json.UseDataContractJsonSerializer = false;
+            json.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+            json.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            json.SerializerSettings.Converters.Add(new IsoDateTimeConverter { DateTimeFormat = "yyyy'-'MM'-'dd' 'HH':'mm':'ss" });
 
 
             // Web API 路由
@@ -71,25 +66,6 @@ namespace Localink.UserCenter
             Register(httpConfiguration);
             app.UseWebApi(httpConfiguration);
 
-        }
-
-
-        public class JsonContentNegotiator : IContentNegotiator
-        {
-            private readonly JsonMediaTypeFormatter _jsonFormatter;
-
-
-            public JsonContentNegotiator(JsonMediaTypeFormatter formatter)
-            {
-                _jsonFormatter = formatter;
-            }
-
-
-            public ContentNegotiationResult Negotiate(Type type, HttpRequestMessage request, IEnumerable<MediaTypeFormatter> formatters)
-            {
-                var result = new ContentNegotiationResult(_jsonFormatter, new MediaTypeHeaderValue("application/json"));
-                return result;
-            }
         }
     }
 }

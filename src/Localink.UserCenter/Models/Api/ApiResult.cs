@@ -17,7 +17,7 @@ namespace Localink.UserCenter.Models.Api
         {
             return new ApiResult
             {
-                Result = null,
+                Result = string.Empty,
                 Success = false,
                 Error = new Error
                 {
@@ -32,7 +32,7 @@ namespace Localink.UserCenter.Models.Api
         {
             return new ApiResult
             {
-                Result = null,
+                Result = string.Empty,
                 Success = false,
                 Error = new Error
                 {

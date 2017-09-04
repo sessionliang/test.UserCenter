@@ -12,5 +12,7 @@ namespace Localink.UserCenter.Models.Api.Users
         public string PhoneNumber { get; set; }
         public string Password { get; set; }
         public string CountryCode { get; set; }
+        public string Forename { get; set; }
+        public string Surname { get; set; }
     }
 }

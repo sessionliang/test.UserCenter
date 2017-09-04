@@ -1,4 +1,5 @@
 ﻿using Localink.UserCenter.AspNetIdentity.Entitys;
+using Localink.UserCenter.AspNetIdentity.Services;
 using Localink.UserCenter.AspNetIdentity.Validators;
 using Localink.UserCenter.IdentityServer;
 using Microsoft.AspNet.Identity;
@@ -49,6 +50,14 @@ namespace Localink.UserCenter.AspNetIdentity.Managers
 
             //设置claim创建
             //userManager.ClaimsIdentityFactory = new CustomClaimsIdentityFactory<AppUser>();
+
+            //设置email
+            userManager.EmailService = new EmailService();
+
+            //UserTokenProvider
+            var dataProtector = new DpapiDataProtectionProvider("Localink.UserCenter").Create("change password");
+            userManager.UserTokenProvider = new DataProtectorTokenProvider<AppUser, long>(dataProtector)
+            { TokenLifespan = TimeSpan.FromMinutes(10) };
 
             return userManager;
         }

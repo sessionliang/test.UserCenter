@@ -237,9 +237,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="AspNetIdentity\Providers\" />
     <Folder Include="Views\test\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Packages\IdentityServer3.AspNetIdentity\IdentityServer3.AspNetIdentity.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\ClientAuthConfig.cs" />
@@ -284,12 +286,15 @@
     <Compile Include="AspNetIdentity\IdentityServer3.AspNetIdentity.cs" />
     <Compile Include="AspNetIdentity\Managers\AppRoleManager.cs" />
     <Compile Include="AspNetIdentity\Managers\AppRoleStore.cs" />
+    <Compile Include="AspNetIdentity\Managers\AppSignInManager.cs" />
     <Compile Include="AspNetIdentity\Managers\AppUserManager.cs" />
     <Compile Include="AspNetIdentity\Managers\AppUserStore.cs" />
+    <Compile Include="AspNetIdentity\Services\EmailService.cs" />
     <Compile Include="AspNetIdentity\Validators\CustomePasswordValidator.cs" />
     <Compile Include="AspNetIdentity\Validators\CustomeUserValidator.cs" />
     <Compile Include="AuthAttribute.cs" />
     <Compile Include="AuthorizationManager.cs" />
+    <Compile Include="Configurations\MailConfig.cs" />
     <Compile Include="Content\hui\lib\ueditor\1.4.3\net\App_Code\Config.cs" />
     <Compile Include="Content\hui\lib\ueditor\1.4.3\net\App_Code\ConfigHandler.cs" />
     <Compile Include="Content\hui\lib\ueditor\1.4.3\net\App_Code\CrawlerHandler.cs" />
@@ -310,11 +315,13 @@
     <Compile Include="IdentityServer\Certificate.cs" />
     <Compile Include="IdentityServer\Clients.cs" />
     <Compile Include="IdentityServer\CustomClaimsProvider.cs" />
+    <Compile Include="IdentityServer\CustomeAuthenticationSessionValidator.cs" />
     <Compile Include="IdentityServer\Factory.cs" />
     <Compile Include="IdentityServer\Scopes.cs" />
     <Compile Include="IdentityServer\Users.cs" />
     <Compile Include="Models\Api\ApiResult.cs" />
     <Compile Include="Models\Api\Users\AddUserInput.cs" />
+    <Compile Include="Models\Api\Users\ForgetPwdInput.cs" />
     <Compile Include="Models\Api\Users\UpdatePwdInput.cs" />
     <Compile Include="Models\Api\Users\UpdateUserInput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -1468,6 +1475,7 @@
     <Content Include="Views\User\Edit.cshtml" />
     <Content Include="Views\User\Detail.cshtml" />
     <Content Include="Views\User\UpdatePwd.cshtml" />
+    <Content Include="Views\User\ChangePwd.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Localink.UserCenter.Common\Localink.UserCenter.Common.csproj">

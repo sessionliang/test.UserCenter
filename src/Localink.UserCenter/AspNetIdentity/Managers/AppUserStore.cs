@@ -9,6 +9,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity.Owin;
 using Localink.UserCenter.Common;
+using Microsoft.Owin;
 
 namespace Localink.UserCenter.AspNetIdentity.Managers
 {
@@ -16,6 +17,18 @@ namespace Localink.UserCenter.AspNetIdentity.Managers
     {
         public AppUserStore(AppIdentityDbContext context) : base(context)
         {
+        }
+
+        public static AppUserStore Create(
+                 IdentityFactoryOptions<AppUserStore> options,
+                 IOwinContext context)
+        {
+            return Create(context.Get<AppIdentityDbContext>());
+        }
+
+        public static AppUserStore Create(AppIdentityDbContext dbContext)
+        {
+            return new AppUserStore(dbContext);
         }
 
         public async override Task<IList<Claim>> GetClaimsAsync(AppUser user)
