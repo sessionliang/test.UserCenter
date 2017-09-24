@@ -10,9 +10,9 @@ namespace Localink.UserCenter.Controllers
 {
 
     [HandleForbidden]
-    [Auth(Roles = "Administrators")]
     public class HomeController : Controller
     {
+        [Auth(Roles = "Administrators")]
         public ActionResult Index()
         {
             ViewBag.Title = "Home Page";

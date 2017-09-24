@@ -58,7 +58,7 @@ namespace Localink.UserCenter.App_Start
                 SignInAsAuthenticationType = "Cookies",
                 //设置令牌到期时间
                 UseTokenLifetime = false,
-
+                
                 //配置修改claims
                 Notifications = new OpenIdConnectAuthenticationNotifications
                 {

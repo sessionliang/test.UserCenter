@@ -34,7 +34,7 @@ namespace Localink.UserCenter.AspNetIdentity
             factory.Register(new Registration<AppRoleStore>());
             factory.Register(new Registration<AppIdentityDbContext>(resolver => appContext));
 
-            factory.AuthenticationSessionValidator = new Registration<IAuthenticationSessionValidator, CustomeAuthenticationSessionValidator>();
+            //factory.AuthenticationSessionValidator = new Registration<IAuthenticationSessionValidator, CustomeAuthenticationSessionValidator>();
         }
     }
 }

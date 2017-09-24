@@ -50,7 +50,6 @@ namespace Localink.UserCenter.IdentityServer
                     AllowedCorsOrigins = new List<string> {
                         "http://127.0.0.1:8020"
                     },
-
                     AllowedScopes = new List<string>
                     {
                         "openid",
