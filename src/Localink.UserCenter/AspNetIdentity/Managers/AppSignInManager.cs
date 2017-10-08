@@ -18,13 +18,16 @@ namespace Localink.UserCenter.AspNetIdentity.Managers
 
         public static AppSignInManager Create(IdentityFactoryOptions<AppSignInManager> options, IOwinContext context)
         {
-            var signInManager = new AppSignInManager(context.Get<AppUserManager>(), context.Authentication);
-            return signInManager;
+            return Create(context.Get<AppUserManager>(), context.Authentication);
         }
 
         public static AppSignInManager Create(UserManager<AppUser, long> userManager, IAuthenticationManager authenticationManager)
         {
-            var signInManager = new AppSignInManager(userManager, authenticationManager);
+            var signInManager = HttpContext.Current.GetOwinContext().Get<AppSignInManager>();
+            if (signInManager == null)
+            {
+                signInManager = new AppSignInManager(userManager, authenticationManager);
+            }
             return signInManager;
         }
     }

@@ -25,8 +25,14 @@ namespace Localink.UserCenter.AspNetIdentity.Managers
 
         public static AppRoleManager Create(AppIdentityDbContext dbContext)
         {
-            return new AppRoleManager(new
+            var roleManager = HttpContext.Current.GetOwinContext().Get<AppRoleManager>();
+            if (roleManager == null)
+            {
+                roleManager = new AppRoleManager(new
                     AppRoleStore(dbContext));
+            }
+            return roleManager;
+
         }
     }
 }

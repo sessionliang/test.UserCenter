@@ -17,5 +17,21 @@ namespace Localink.UserCenter.Controllers
                 return HttpContext.GetOwinContext().GetUserManager<AppUserManager>();
             }
         }
+
+        protected AppUserStore UserStore
+        {
+            get
+            {
+                return HttpContext.GetOwinContext().GetUserManager<AppUserStore>();
+            }
+        }
+
+        protected AppSignInManager SignInManager
+        {
+            get
+            {
+                return HttpContext.GetOwinContext().GetUserManager<AppSignInManager>();
+            }
+        }
     }
 }

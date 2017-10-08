@@ -28,36 +28,42 @@ namespace Localink.UserCenter.AspNetIdentity.Managers
 
         public static AppUserManager Create(AppIdentityDbContext dbContext)
         {
-            var store = new AppUserStore(dbContext);
-            var userManager = new AppUserManager(store);
+            var store = AppUserStore.Create(dbContext);
+            var userManager = HttpContext.Current.GetOwinContext().Get<AppUserManager>();
 
-            //设置密码安全策略
-            userManager.PasswordValidator = new CustomePasswordValidator()
+            if (userManager == null)
             {
-                RequiredLength = 6,
-                RequireLowercase = false,
-                RequireDigit = true,
-                RequireNonLetterOrDigit = false,
-                RequireUppercase = false
-            };
+                userManager = new AppUserManager(store);
 
-            //设置用户安全策略
-            userManager.UserValidator = new CustomeUserValidator(userManager)
-            {
-                AllowOnlyAlphanumericUserNames = true,//用户名只能包含数字，字母
-                RequireUniqueEmail = true//邮箱唯一
-            };
+                //设置密码安全策略
+                userManager.PasswordValidator = new CustomePasswordValidator()
+                {
+                    RequiredLength = 6,
+                    RequireLowercase = false,
+                    RequireDigit = true,
+                    RequireNonLetterOrDigit = false,
+                    RequireUppercase = false
+                };
 
-            //设置claim创建
-            //userManager.ClaimsIdentityFactory = new CustomClaimsIdentityFactory<AppUser>();
+                //设置用户安全策略
+                userManager.UserValidator = new CustomeUserValidator(userManager)
+                {
+                    AllowOnlyAlphanumericUserNames = true,//用户名只能包含数字，字母
+                    RequireUniqueEmail = true//邮箱唯一
+                };
 
-            //设置email
-            userManager.EmailService = new EmailService();
+                //设置claim创建
+                //userManager.ClaimsIdentityFactory = new CustomClaimsIdentityFactory<AppUser>();
 
-            //UserTokenProvider
-            var dataProtector = new DpapiDataProtectionProvider("Localink.UserCenter").Create("change password");
-            userManager.UserTokenProvider = new DataProtectorTokenProvider<AppUser, long>(dataProtector)
-            { TokenLifespan = TimeSpan.FromMinutes(10) };
+                //设置email
+                userManager.EmailService = new EmailService();
+
+                //UserTokenProvider
+                var dataProtector = new DpapiDataProtectionProvider("Localink.UserCenter").Create("change password");
+                userManager.UserTokenProvider = new DataProtectorTokenProvider<AppUser, long>(dataProtector)
+                { TokenLifespan = TimeSpan.FromMinutes(10) };
+            }
+
 
             return userManager;
         }

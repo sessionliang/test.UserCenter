@@ -28,7 +28,11 @@ namespace Localink.UserCenter.AspNetIdentity.Managers
 
         public static AppUserStore Create(AppIdentityDbContext dbContext)
         {
-            return new AppUserStore(dbContext);
+            var userStore = HttpContext.Current.GetOwinContext().Get<AppUserStore>();
+            if (userStore == null) {
+                userStore = new AppUserStore(dbContext);
+            }
+            return userStore;
         }
 
         public async override Task<IList<Claim>> GetClaimsAsync(AppUser user)

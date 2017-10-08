@@ -141,6 +141,7 @@ namespace Localink.UserCenter.Controllers
                     var token = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
 
                     var result = await UserManager.ResetPasswordAsync(user.Id, token, form["newpassword"]);
+
                     if (result.Succeeded)
                         return Json(new { Success = true });
                     else

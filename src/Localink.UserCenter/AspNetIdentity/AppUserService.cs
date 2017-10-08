@@ -24,7 +24,6 @@ namespace Localink.UserCenter.AspNetIdentity
     {
         public static void ConfigureCustomUserService(this IdentityServerServiceFactory factory)
         {
-
             var appContext = AppIdentityDbContext.Create();
 
             factory.UserService = new Registration<IUserService, AppUserService>();
