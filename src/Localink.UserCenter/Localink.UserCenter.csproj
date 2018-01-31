@@ -315,8 +315,9 @@
     <Compile Include="IdentityServer\Certificate.cs" />
     <Compile Include="IdentityServer\Clients.cs" />
     <Compile Include="IdentityServer\CustomClaimsProvider.cs" />
-    <Compile Include="IdentityServer\CustomeAuthenticationSessionValidator.cs" />
+    <Compile Include="IdentityServer\CustomAuthenticationSessionValidator.cs" />
     <Compile Include="IdentityServer\Factory.cs" />
+    <Compile Include="IdentityServer\CustomEventService.cs" />
     <Compile Include="IdentityServer\Scopes.cs" />
     <Compile Include="IdentityServer\Users.cs" />
     <Compile Include="Models\Api\ApiResult.cs" />

@@ -27,6 +27,12 @@ namespace Localink.UserCenter.App_Start
 
                 factory.ClaimsProvider = new Registration<IdentityServer3.Core.Services.IClaimsProvider, CustomClaimsProvider>();
 
+                //factory.AuthenticationSessionValidator = new Registration<IdentityServer3.Core.Services.IAuthenticationSessionValidator, CustomAuthenticationSessionValidator>();
+
+                factory.EventService = new Registration<IdentityServer3.Core.Services.IEventService, CustomEventService>();
+                
+
+
                 //配置idsrc options
                 var idsrvOptions = new IdentityServerOptions
                 {
@@ -40,6 +46,14 @@ namespace Localink.UserCenter.App_Start
                         EnablePostSignOutAutoRedirect = true,
                         //第三方OP配置
                         IdentityProviders = ConfigureAdditionalIdentityProviders
+                    },
+
+                    EventsOptions = new EventsOptions
+                    {
+                        RaiseSuccessEvents = false,
+                        RaiseErrorEvents = false,
+                        RaiseFailureEvents = false,
+                        RaiseInformationEvents = true
                     }
                 };
 

@@ -239,5 +239,40 @@ namespace Localink.UserCenter.Controllers.Api
                 return ApiResult.CreateErrorResult(ex, !User.Identity.IsAuthenticated);
             }
         }
+
+        /// <summary>
+        /// 心跳检测
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("HeartRate")]
+        public async Task<ApiResult> HeartRate()
+        {
+            try
+            {
+                //对比设备ID，如果设备ID不正确
+                var deviceId = HttpContext.Current.Request.Headers["DeviceID"];
+                var cacheKey = "UserID_DeviceID_" + UserId;
+                var deviceIdCache = HttpContext.Current.Cache.Get(cacheKey);
+                if (string.IsNullOrEmpty(deviceId))
+                {
+                    return ApiResult.CreateErrorResult("-1", !User.Identity.IsAuthenticated, "DeviceID为空");
+                }
+                if (deviceIdCache == null)
+                {
+                    return ApiResult.CreateErrorResult("-2", !User.Identity.IsAuthenticated, "登录超时");
+                }
+                if (deviceIdCache.ToString() != deviceId)
+                {
+                    return ApiResult.CreateErrorResult("-3", !User.Identity.IsAuthenticated, "您的账户已经在其他设备登录，您已被迫下线");
+                }
+                return ApiResult.CreateSuccessResult(new { }, !User.Identity.IsAuthenticated);
+            }
+            catch (Exception ex)
+            {
+                return ApiResult.CreateErrorResult(ex, !User.Identity.IsAuthenticated);
+            }
+        }
     }
 }
