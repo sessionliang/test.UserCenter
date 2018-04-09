@@ -42,6 +42,7 @@ namespace Localink.UserCenter.App_Start
             //2. 配置OIDC
             app.UseOpenIdConnectAuthentication(new Microsoft.Owin.Security.OpenIdConnect.OpenIdConnectAuthenticationOptions
             {
+                AuthenticationType = "UserCenterBearer",
                 //认证地址
                 Authority = IdentityConfig.IdsrvRootAddress + "identity",
                 //客户端标识
